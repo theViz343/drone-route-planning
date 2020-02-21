@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import geopandas
 from geopandas import GeoSeries
 from shapely.geometry import Polygon,Point,MultiLineString
-g=geopandas.read_file("/home/vishwesh/PycharmProjects/drone-route-planning/maharashtra/maharashtra_administrative.shp")
+g=geopandas.read_file("maharashtra/maharashtra_administrative.shp")
 g.plot()
 boundary=[]
 for district in g["geometry"]:
