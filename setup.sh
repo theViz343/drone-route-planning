@@ -5,4 +5,5 @@ source venv/bin/activate
 pip3 install shapely
 pip3 install geopandas
 pip3 install matplotlib
+pip3 install descartes
 deactivate
