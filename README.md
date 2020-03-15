@@ -7,5 +7,7 @@ Steps to setup project on Linux:
 4. Clone the repo.
 5. Go to PycharmProjects folder, then to the drone-route-mapping folder and make the setup.sh file executable.
 6. run the setup file.
+
+
 UPDATE: We didn't get shortlisted for the hackathon :(
 but let's finish this sucka nonetheless!!
