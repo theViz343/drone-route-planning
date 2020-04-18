@@ -7,4 +7,7 @@ pip3 install geopandas
 pip3 install matplotlib
 pip3 install descartes
 pip3 install numpy
+pip3 install scipy
+pip3 install sckit-learn
+pip3 install sklearn
 deactivate
