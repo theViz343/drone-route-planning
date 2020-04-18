@@ -2,6 +2,8 @@
 # using the convex hull
 # functions of the Shapely library.
 # A map of districts of Maharashtra is used for this example.
+import time
+
 import geopandas
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -42,11 +44,11 @@ def squareInside(point, width, poly) :
 
 ### Parameters
 maha_shape = geopandas.read_file( "maharashtra/maharashtra_administrative.shp" )
-width = 0.4
+width = 0.5
 offset = width / 2
 noOfClusters = 3
 ###
-
+start_time = time.time()
 # Calculate the Convex Hull of all MultiLineString districts
 boundary = []
 for district in maha_shape["geometry"] :
@@ -82,6 +84,7 @@ for point in points :
         point = (point[0] + offset, point[1] + offset)
         pointsgeomshifted.append( Point( point ) )
 
+total_points = len( pointsgeom )
 npGridPoints = np.array( GridPoints )
 
 # Clustering of area into different sections
@@ -105,17 +108,17 @@ ax[1][0].plot( boundaryPointsx, boundaryPointsy, color='g' )
 ax[1][1].plot( boundaryPointsx, boundaryPointsy, color='g' )
 
 # PLOT1: Plot shapefile info directly
-ax[0][0].set_title('Shapefile')
+ax[0][0].set_title( 'Shapefile' )
 maha_shape.plot( ax=ax[0][0] )
 
 # PLOT2: Centre-shifted point plot
-ax[0][1].set_title('Centre-shifted points')
+ax[0][1].set_title( 'Centre-shifted points' )
 area.plot( ax=ax[0][1], facecolor='none', edgecolor='blue' )
 p = GeoSeries( pointsgeomshifted )
 p.plot( ax=ax[0][1], color="red", markersize=1 )
 
 # PLOT3: Raw points and cell boundary plot
-ax[1][0].set_title('Cell boundary plot')
+ax[1][0].set_title( 'Cell boundary plot' )
 area.plot( ax=ax[1][0], facecolor='none', edgecolor='blue' )
 q = GeoSeries( pointsgeom )
 q.plot( ax=ax[1][0], color="red", markersize=1 )
@@ -124,7 +127,7 @@ for point in pointsgeom :
     ax[1][0].add_patch( rect )
 
 # PLOT4: Colored clustered plot with cell boundaries
-ax[1][1].set_title('Clustered plot')
+ax[1][1].set_title( 'Clustered plot' )
 colors = ['red', 'black', 'green', 'yellow', 'orange', 'brown']
 area.plot( ax=ax[1][1], facecolor='none', edgecolor='blue' )
 
@@ -138,5 +141,10 @@ for i in range( noOfClusters ) :
         rect = patches.Rectangle( (point.x, point.y), width, width, linewidth=1, edgecolor=colors[i],
                                   facecolor='none' )
         ax[1][1].add_patch( rect )  # printing cell boundary
-    print( 'Size of cluster', i, "is", clusters[i].size )
+    print( 'Size of cluster', i, "is", clusters[i].shape[0] )
+
+print( total_points )
+end_time = time.time()
+total_time = end_time - start_time
+print( str( total_time ) + "s" )
 plt.show()
