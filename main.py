@@ -9,11 +9,18 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 from geopandas import GeoSeries
-from shapely.geometry import Point, MultiLineString, MultiPoint
+from shapely.geometry import Point, MultiLineString, MultiPoint, Polygon
 from sklearn.cluster import KMeans
 
 
-def squareInside(point, width, poly) :
+def squareInside(point, width, poly) : #new method, more efficient
+    x = point.x
+    y = point.y
+    square = Polygon( [(x, y), (x + width, y), (x + width, y + width), (x, y + width)] )
+    return square.intersects( poly )
+
+
+def cornerInside(point, width, poly) : # very slow, deprecated (don't use)
     x = point.x
     y = point.y
     # - -
@@ -44,9 +51,9 @@ def squareInside(point, width, poly) :
 
 ### Parameters
 maha_shape = geopandas.read_file( "maharashtra/maharashtra_administrative.shp" )
-width = 0.5
+width = 0.05
 offset = width / 2
-noOfClusters = 3
+noOfClusters = 6
 ###
 start_time = time.time()
 # Calculate the Convex Hull of all MultiLineString districts
@@ -57,6 +64,9 @@ for district in maha_shape["geometry"] :
 boundary_poly = MultiLineString( boundary ).convex_hull
 area = GeoSeries( boundary_poly )
 
+##TimeStamp
+check1 = time.time()
+
 # Calculation of points with set width between them
 
 x0 = area.bounds["minx"][0] - width
@@ -65,6 +75,9 @@ y0 = area.bounds["miny"][0] - width
 y1 = area.bounds["maxy"][0] + width
 boundaryPointsx = [x0, x0, x1, x1, x0]
 boundaryPointsy = [y0, y1, y1, y0, y0]
+
+##TimeStamp
+check2 = time.time()
 
 # Calculating point coordinates across the whole boundary
 points = []
@@ -76,9 +89,13 @@ pointsgeom = []  # normal points python list
 pointsgeomshifted = []  # shifted (to the centre of cell boundary) point python list
 GridPoints = []  # points numpy array
 
+##TimeStamp
+check3 = time.time()
+
 # Calculation of points within the area
 for point in points :
-    if squareInside( Point( point ), width, boundary_poly ) :
+    if squareInside( Point( point ), width,
+                     boundary_poly ) :  # If you use the old fn now called cornerInside, then its quite slow
         GridPoints.append( point )
         pointsgeom.append( Point( point ) )
         point = (point[0] + offset, point[1] + offset)
@@ -86,6 +103,9 @@ for point in points :
 
 total_points = len( pointsgeom )
 npGridPoints = np.array( GridPoints )
+
+##TimeStamp
+check4 = time.time()
 
 # Clustering of area into different sections
 clusteredData = KMeans( n_clusters=noOfClusters ).fit( npGridPoints )
@@ -98,6 +118,22 @@ for i in range( noOfClusters ) :
 
 clusters = np.append( clusters, collection, axis=0 )
 
+##TimeStamp
+check5 = time.time()
+
+# Time calculation
+total_time = check5 - start_time
+print( "Total calculation time is " + str( total_time ) + "s" )
+convex_hull_time = check1 - start_time
+print( "Convex Hull formation time is " + str( convex_hull_time ) + "s" )
+boundary_time = check2 - check1
+print( "boundary formation time is " + str( boundary_time ) + "s" )
+pointifying_time = check3 - check2
+print( "Pointifying time is " + str( pointifying_time ) + "s" )
+inside_time = check4 - check3
+print( "Inside or not calculation time is " + str( inside_time ) + "s" )
+clustering_time = check5 - check4
+print( "Clustering time is " + str( clustering_time ) + "s" )
 # Plots
 fig, ax = plt.subplots( 2, 2 )
 
@@ -144,7 +180,5 @@ for i in range( noOfClusters ) :
     print( 'Size of cluster', i, "is", clusters[i].shape[0] )
 
 print( total_points )
-end_time = time.time()
-total_time = end_time - start_time
-print( str( total_time ) + "s" )
+
 plt.show()
