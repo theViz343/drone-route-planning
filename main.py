@@ -79,27 +79,36 @@ boundaryPointsy = [y0, y1, y1, y0, y0]
 ##TimeStamp
 check2 = time.time()
 
-# Calculating point coordinates across the whole boundary
-points = []
-for i in np.arange( x0, x1, width ) :
-    for j in np.arange( y0, y1, width ) :
-        points.append( (i, j) )
-
 pointsgeom = []  # normal points python list
 pointsgeomshifted = []  # shifted (to the centre of cell boundary) point python list
 GridPoints = []  # points numpy array
+
+# Calculating point coordinates across the whole boundary
+for i in np.arange( x0, x1, width ) :
+    for j in np.arange( y0, y1, width ) :
+        point=(i,j)                               #Checking point here itselff is improving efficiency
+        if squareInside( Point( point ), width,
+                     boundary_poly ) :  # If you use the old fn now called cornerInside, then its quite slow
+            GridPoints.append( point )
+            pointsgeom.append( Point( point ) )
+            point = (point[0] + offset, point[1] + offset)
+            pointsgeomshifted.append( Point( point ) )
+
+        # points.append( (i, j) )
+
+
 
 ##TimeStamp
 check3 = time.time()
 
 # Calculation of points within the area
-for point in points :
-    if squareInside( Point( point ), width,
-                     boundary_poly ) :  # If you use the old fn now called cornerInside, then its quite slow
-        GridPoints.append( point )
-        pointsgeom.append( Point( point ) )
-        point = (point[0] + offset, point[1] + offset)
-        pointsgeomshifted.append( Point( point ) )
+# for point in points :
+#     if squareInside( Point( point ), width,
+#                      boundary_poly ) :  # If you use the old fn now called cornerInside, then its quite slow
+#         GridPoints.append( point )
+#         pointsgeom.append( Point( point ) )
+#         point = (point[0] + offset, point[1] + offset)
+#         pointsgeomshifted.append( Point( point ) )
 
 total_points = len( pointsgeom )
 npGridPoints = np.array( GridPoints )
