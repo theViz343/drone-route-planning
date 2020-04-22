@@ -51,7 +51,7 @@ def cornerInside(point, width, poly) : # very slow, deprecated (don't use)
 
 ### Parameters
 maha_shape = geopandas.read_file( "maharashtra/maharashtra_administrative.shp" )
-width = 0.4
+width = 1
 offset = width / 2
 noOfClusters = 3
 ###
