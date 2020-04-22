@@ -51,9 +51,9 @@ def cornerInside(point, width, poly) : # very slow, deprecated (don't use)
 
 ### Parameters
 maha_shape = geopandas.read_file( "maharashtra/maharashtra_administrative.shp" )
-width = 0.4
+width = 0.05
 offset = width / 2
-noOfClusters = 3
+noOfClusters = 6
 ###
 start_time = time.time()
 # Calculate the Convex Hull of all MultiLineString districts
@@ -180,5 +180,5 @@ for i in range( noOfClusters ) :
     print( 'Size of cluster', i, "is", clusters[i].shape[0] )
 
 print( total_points )
-print(clusters[0])
-# plt.show()
+
+plt.show()
