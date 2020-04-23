@@ -180,5 +180,7 @@ for i in range( noOfClusters ) :
     print( 'Size of cluster', i, "is", clusters[i].shape[0] )
 
 print( total_points )
-print(clusters[0])
+a=centroids.tolist()
+print(a)
+# print(clusters[0])
 # plt.show()

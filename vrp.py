@@ -1,29 +1,32 @@
 from __future__ import print_function
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
-from main1 import clusters
+from main1 import clusters,noOfClusters,total_points,centroids
 from shapely.geometry import Point, MultiLineString, MultiPoint, Polygon
 from sklearn.cluster import KMeans
 import math
-def create_distance_matrix():
-    l=[[]]*4
-    for i in range(3):
-        for point1 in  MultiPoint(clusters[i]):
-            for point2 in MultiPoint(clusters[i]):
-                distance=math.sqrt(((point1.x-point2.x)**2)+((point1.y-point2.y)**2))
-                l[i].append(distance)
-        # print(l[i])
-    return l
+def create_distance_matrix():                       #calculating distance matrix
+    l=[[]]*(total_points)                           #total length of matrix is same as totla points
+    j=0
+    # print(a)
+    for i in range(noOfClusters):                       #looping over points to calculate the distance matrix
+        for point1 in  MultiPoint(clusters[i]):                    
+                for point2 in MultiPoint(clusters[i]):
+                    distance=math.sqrt(((point1.x-point2.x)**2)+((point1.y-point2.y)**2))   # i have hard coded the matrix
+                    l[j].append(distance)                                                   
+                j=j+1
+    # print(l)
+    return l                                            #returing the distance matrix
 
 
-def create_data_model(l):
+def create_data_model(l):                   
     """Stores the data for the problem."""
     data = {}
-    data['distance_matrix'] = l
-    print("hhh")
-    print(l)
-    data['num_vehicles'] = 3
-    data['depot'] = 0
+    data['distance_matrix'] = l                 #l is the distance matrix
+    # print("hhh")
+    # print(l)
+    data['num_vehicles'] = 1                    #assuming we have only one vechile
+    data['depot'] =0                            #this is depot point
     return data
 
 
@@ -99,7 +102,19 @@ def main(l):
         print_solution(data, manager, routing, solution)
 
 
-
-if __name__=="__main__":
-    l=create_distance_matrix()
-    main(l)
+if __name__ == '__main__':
+    l=create_distance_matrix()  
+    main(l)                             #this  gives solution if do not make clusters
+    j=0
+    j=clusters[0].shape[0]              #   this made to access the distance matrix for each clusters 
+    for i in range(noOfClusters):       #this calculate path for each cluster
+        if i==0:    
+            a=l[ :j]                   #  for 1st clusters total point in distance matrix is first j element
+            main(a)
+        elif i==noOfClusters-1:
+            a=l[j:]                 #for last clusters
+            main(a)
+        else:
+            a=l[j:j+clusters[i].shape[0]]
+            j+=clusters[i].shape[0]
+            main(a)                         #for rest of clusters
