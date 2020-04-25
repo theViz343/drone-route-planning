@@ -8,6 +8,11 @@ Steps to setup project on Linux:
 5. Go to PycharmProjects folder, then to the drone-route-mapping folder and make the setup.sh file executable.
 6. run the setup file.
 
-Run main.py to see plots\
+All plots are tested on maharashtra shapefile.\
+
+
+Run main.py to see plots with clustering\
+Run vrp.py to see solutions of VRP on all clusters\
+
 Try to play with the parameters to get different results
 
