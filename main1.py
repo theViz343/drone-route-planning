@@ -13,14 +13,14 @@ from shapely.geometry import Point, MultiLineString, MultiPoint, Polygon
 from sklearn.cluster import KMeans
 
 
-def squareInside(point, width, poly) : #new method, more efficient
+def squareInside(point, width, poly) :  # new method, more efficient
     x = point.x
     y = point.y
     square = Polygon( [(x, y), (x + width, y), (x + width, y + width), (x, y + width)] )
     return square.intersects( poly )
 
 
-def cornerInside(point, width, poly) : # very slow, deprecated (don't use)
+def cornerInside(point, width, poly) :  # very slow, deprecated (don't use)
     x = point.x
     y = point.y
     # - -
@@ -96,10 +96,11 @@ check3 = time.time()
 for point in points :
     if squareInside( Point( point ), width,
                      boundary_poly ) :  # If you use the old fn now called cornerInside, then its quite slow
-        GridPoints.append( point )
+        # GridPoints.append( point )
         pointsgeom.append( Point( point ) )
         point = (point[0] + offset, point[1] + offset)
         pointsgeomshifted.append( Point( point ) )
+        GridPoints.append( point )
 
 total_points = len( pointsgeom )
 npGridPoints = np.array( GridPoints )
@@ -109,7 +110,7 @@ check4 = time.time()
 
 # Clustering of area into different sections
 clusteredData = KMeans( n_clusters=noOfClusters ).fit( npGridPoints )
-clusters = np.array([])
+clusters = np.array( [] )
 centroids = clusteredData.cluster_centers_
 labels = clusteredData.labels_  # labels tell the cluster to which a given point corresponds to
 collection = []
@@ -180,7 +181,7 @@ for i in range( noOfClusters ) :
     print( 'Size of cluster', i, "is", clusters[i].shape[0] )
 
 print( total_points )
-a=centroids.tolist()
-print(a)
+a = centroids.tolist()
+print( a )
 # print(clusters[0])
 # plt.show()
