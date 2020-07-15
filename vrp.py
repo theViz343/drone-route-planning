@@ -114,7 +114,7 @@ if __name__ == '__main__' :
             geo_path = GeoSeries( LinearRing( path ) )
             geo_solution.append( geo_path )
 
-        ax.set_title( 'Cell boundary plot' )
+        ax.set_title( 'VRP route plot' )
         area.plot( ax=ax, facecolor='none', edgecolor='blue' )
         q = GeoSeries( pointsgeom )
         q.plot( ax=ax, color="red", markersize=1 )
