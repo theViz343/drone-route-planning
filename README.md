@@ -4,8 +4,6 @@ This project aims to develop a UAV route planning software to cover large areas 
 
 ## Table Of Contents
 
-- [Drone-Route-Planning](#drone-route-planning)
-  * [Table Of Contents](#table-of-contents)
   * [Setup instructions](#setup-instructions)
   * [Plots](#plots)
   * [Contributors](#contributors)
