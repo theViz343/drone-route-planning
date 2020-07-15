@@ -16,12 +16,12 @@ This project aims to develop a UAV route planning software to cover large areas 
 2. Navigate to the project directory, then
     - For Linux, make setup.sh executable, then run it.
    
-          * `chmod +x setup.sh`
-
-          *  `./setup.sh`
+    ```
+    chmod +x setup.sh
+    ./setup.sh
+    ```
     - For Windows, run the bat file as is in the cmd.
-    
-          * `setup.bat`
+    `setup.bat`
 
 3. To run any program in this project, always use the virtual environment -
     - For Linux, run `source venv/bin/activate` 
