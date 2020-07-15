@@ -27,8 +27,8 @@ This project aims to develop a UAV route planning software to cover large areas 
 > Note: All plots are tested on maharashtra shapefile.
 
 ## Plots
-![Clustering plots] 
-![Route Plot]
+![Clustering plots](https://raw.githubusercontent.com/theViz343/drone-route-planning/master/plots/clusterplot.jpg) 
+![Route Plot](https://raw.githubusercontent.com/theViz343/drone-route-planning/master/plots/vrpplot.jpg)
 
 > Try to play with the parameters to get different results
 
