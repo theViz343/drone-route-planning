@@ -3,11 +3,9 @@
 This project aims to develop a UAV route planning software to cover large areas efficiently. The use cases involve having multiple drones at hand, and also have multiple charging locations for the drones, which significantly increase the complexity of the problem.
 
 ## Table Of Contents
-
   * [Setup instructions](#setup-instructions)
   * [Plots](#plots)
   * [Contributors](#contributors)
-
 
 ## Setup instructions
 
